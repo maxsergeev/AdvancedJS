@@ -1,12 +1,20 @@
 const forms = () => {
     const form = document.querySelectorAll('form');
     const input = document.querySelectorAll('input');
+    const numberInput = document.querySelectorAll('input[name="user_phone"]')
 
     const status = {
         loading: "Идет загрузка...",
         done: "Ваша заявка отправлена успешно!",
         error: "Что-то пошло не так, попробуйте еще раз!"
     };
+
+    numberInput.forEach((item) => {
+        item.addEventListener('input', () => {
+            item.value = item.value.replace(/\D/, '');
+        })
+    })
+
 
     const postData = async(data, url) => {
         document.querySelector('.status').textContent = status.loading;
