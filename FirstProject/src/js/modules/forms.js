@@ -1,7 +1,9 @@
-const forms = () => {
+import checkNum from "./checkNum";
+
+const forms = (state) => {
     const form = document.querySelectorAll('form');
     const input = document.querySelectorAll('input');
-    const numberInput = document.querySelectorAll('input[name="user_phone"]')
+
 
     const status = {
         loading: "Идет загрузка...",
@@ -9,12 +11,7 @@ const forms = () => {
         error: "Что-то пошло не так, попробуйте еще раз!"
     };
 
-    numberInput.forEach((item) => {
-        item.addEventListener('input', () => {
-            item.value = item.value.replace(/\D/, '');
-        })
-    })
-
+    checkNum('input[name="user_phone"]');
 
     const postData = async(data, url) => {
         document.querySelector('.status').textContent = status.loading;
@@ -40,6 +37,13 @@ const forms = () => {
             item.appendChild(statusMess);
 
             const data = new FormData(item);
+            console.log(item.getAttribute('data-calc'));
+            if (item.getAttribute('data-calc') === "end") {
+                for (let key in state) {
+                    data.append(key, state[key])
+                }
+            }
+
             postData(data, 'assets/server.php')
                 .then((res) => {
                     console.log(res);
